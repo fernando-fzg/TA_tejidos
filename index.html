@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco de Ingeniería de Tejidos</title>
+<meta name="description" content="Banco de 200 preguntas de opción múltiple sobre Tópicos Avanzados en Ingeniería de Tejidos, con resultados y retroalimentación cada 10 preguntas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --surface-2: #f0f2f5;
+    --text: #1b1f24;
+    --muted: #5d6673;
+    --border: #dde1e7;
+    --accent: #0f766e;
+    --accent-soft: #e3f3f1;
+    --ok: #15803d;
+    --ok-soft: #e7f6ec;
+    --bad: #b42318;
+    --bad-soft: #fdecea;
+    --warn: #a15c07;
+    --warn-soft: #fff4e0;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .08);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1216;
+      --surface: #171b21;
+      --surface-2: #1f242c;
+      --text: #e6e9ee;
+      --muted: #9aa4b2;
+      --border: #2c333d;
+      --accent: #2dd4bf;
+      --accent-soft: #11302d;
+      --ok: #4ade80;
+      --ok-soft: #12291b;
+      --bad: #f87171;
+      --bad-soft: #2f1517;
+      --warn: #fbbf24;
+      --warn-soft: #2d2410;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1216;
+    --surface: #171b21;
+    --surface-2: #1f242c;
+    --text: #e6e9ee;
+    --muted: #9aa4b2;
+    --border: #2c333d;
+    --accent: #2dd4bf;
+    --accent-soft: #11302d;
+    --ok: #4ade80;
+    --ok-soft: #12291b;
+    --bad: #f87171;
+    --bad-soft: #2f1517;
+    --warn: #fbbf24;
+    --warn-soft: #2d2410;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px 64px; }
+
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .top-inner { max-width: 860px; margin: 0 auto; padding: 12px 16px; display: flex; gap: 12px; align-items: center; }
+  .brand { font-weight: 700; font-size: 1.02rem; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .brand small { display: block; font-weight: 500; color: var(--muted); font-size: .8rem; }
+  .icon-btn {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 10px; padding: 7px 11px; font-size: .88rem; white-space: nowrap;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+
+  .progress { height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 18px 0 6px; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: width .3s ease; }
+  .progress-label { font-size: .85rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 18px; margin-top: 16px;
+  }
+
+  .block-head h1 { font-size: 1.35rem; margin: 0 0 4px; line-height: 1.3; }
+  .block-head .src { color: var(--muted); font-size: .88rem; }
+  .tag {
+    display: inline-block; font-size: .75rem; font-weight: 600; letter-spacing: .02em;
+    background: var(--accent-soft); color: var(--accent); border-radius: 99px; padding: 2px 10px; margin-bottom: 8px;
+  }
+
+  .q-num { font-size: .8rem; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .q-text { font-weight: 600; margin: 0 0 12px; }
+  .opts { display: grid; gap: 8px; }
+  .opt {
+    display: flex; gap: 10px; align-items: flex-start; text-align: left;
+    border: 1.5px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 10px; padding: 10px 12px; width: 100%;
+    transition: border-color .15s, background .15s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt .letter {
+    flex: 0 0 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    font-size: .8rem; font-weight: 700; background: var(--surface-2); color: var(--muted);
+  }
+  .opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+  .opt.sel .letter { background: var(--accent); color: var(--surface); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); }
+  .opt.correct .letter { background: var(--ok); color: var(--surface); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.wrong .letter { background: var(--bad); color: var(--surface); }
+
+  .fb { margin-top: 12px; border-radius: 10px; padding: 10px 12px; font-size: .93rem; }
+  .fb.ok { background: var(--ok-soft); border-left: 4px solid var(--ok); }
+  .fb.bad { background: var(--bad-soft); border-left: 4px solid var(--bad); }
+  .fb strong { display: block; margin-bottom: 2px; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+  .btn {
+    border: 1px solid transparent; border-radius: 10px; padding: 10px 18px; font-weight: 600;
+    background: var(--accent); color: var(--surface);
+  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .hint { color: var(--muted); font-size: .88rem; }
+
+  .score { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .ring { --p: 0; width: 92px; height: 92px; border-radius: 50%; flex: 0 0 auto;
+    background: conic-gradient(var(--ring-c, var(--accent)) calc(var(--p) * 1%), var(--surface-2) 0);
+    display: grid; place-items: center; }
+  .ring > span { width: 72px; height: 72px; border-radius: 50%; background: var(--surface);
+    display: grid; place-items: center; font-weight: 700; font-size: 1.25rem; }
+  .score h2 { margin: 0 0 4px; font-size: 1.2rem; }
+  .score p { margin: 0; color: var(--muted); }
+  .score-msg.ok { --ring-c: var(--ok); }
+  .score-msg.mid { --ring-c: var(--warn); }
+  .score-msg.low { --ring-c: var(--bad); }
+
+  .review-list { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .review-list li { font-size: .9rem; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
+  .review-list li a { color: inherit; }
+
+  .grid-blocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin-top: 12px; }
+  .bchip {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 10px; padding: 8px 10px; text-align: left; font-size: .85rem; line-height: 1.3;
+  }
+  .bchip b { display: block; }
+  .bchip span { color: var(--muted); font-size: .78rem; }
+  .bchip.done { border-color: var(--ok); }
+  .bchip.done span { color: var(--ok); font-weight: 600; }
+  .bchip.current { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  table.sum { width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: 12px; }
+  table.sum th, table.sum td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.sum td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .bar { height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin-top: 4px; min-width: 60px; }
+  .bar > div { height: 100%; }
+
+  .settings label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
+  .settings input { margin-top: 4px; accent-color: var(--accent); }
+  .settings small { display: block; color: var(--muted); }
+
+  dialog { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text);
+    padding: 0; width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px); }
+  dialog::backdrop { background: rgba(0, 0, 0, .45); }
+  .dlg-body { padding: 18px; overflow: auto; }
+  .dlg-body h3 { margin: 0 0 8px; }
+
+  footer { color: var(--muted); font-size: .8rem; text-align: center; margin-top: 36px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  @media (max-width: 520px) {
+    .card { padding: 14px; }
+    .block-head h1 { font-size: 1.15rem; }
+    .icon-btn { padding: 6px 9px; font-size: .82rem; }
+    .brand small { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">Banco de preguntas · Ingeniería de Tejidos<small>Tópicos Avanzados · UPCH</small></div>
+    <button class="icon-btn" id="btnBlocks" type="button">Bloques</button>
+    <button class="icon-btn" id="btnSettings" type="button">Ajustes</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="progress" aria-hidden="true"><div id="progBar"></div></div>
+  <div class="progress-label"><span id="progText"></span><span id="progScore"></span></div>
+  <div id="view"></div>
+  <footer>200 preguntas · 8 temas · 20 bloques de 10. Tu avance se guarda solo en este navegador.</footer>
+</main>
+
+<dialog id="dlgBlocks">
+  <div class="dlg-body">
+    <h3>Elegir bloque</h3>
+    <div class="hint">Los bloques completados muestran su puntaje.</div>
+    <div class="grid-blocks" id="blockGrid"></div>
+    <div class="actions"><button class="btn secondary" type="button" data-close>Cerrar</button></div>
+  </div>
+</dialog>
+
+<dialog id="dlgSettings">
+  <div class="dlg-body settings">
+    <h3>Ajustes</h3>
+    <label><input type="checkbox" id="optShuffleQ">
+      <span>Mezclar preguntas de todos los temas<small>Si está desactivado, cada bloque corresponde a un solo tema, en el orden del curso. Al cambiarlo se reinicia el avance.</small></span></label>
+    <label><input type="checkbox" id="optShuffleO" checked>
+      <span>Barajar el orden de las alternativas<small>Evita memorizar la posición de la respuesta.</small></span></label>
+    <label><input type="checkbox" id="optDark">
+      <span>Modo oscuro<small>Si no lo cambias, se usa el tema del sistema.</small></span></label>
+    <div class="actions">
+      <button class="btn secondary" type="button" id="btnReset">Borrar todo el avance</button>
+      <button class="btn" type="button" data-close>Listo</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="preguntas.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const PER_BLOCK = 10;
+  const LETTERS = ["A", "B", "C", "D", "E", "F"];
+  const ORDER = Object.keys(TEMAS);
+  const STORE_KEY = "banco-tejidos-v1";
+
+  // ---------- persistence (safe) ----------
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; } catch (e) { return null; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  // ---------- deterministic shuffle ----------
+  function rng(seed) {
+    let s = seed >>> 0;
+    return function () {
+      s = (s + 0x6D2B79F5) >>> 0;
+      let t = s;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function shuffled(arr, seed) {
+    const a = arr.slice(), r = rng(seed);
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(r() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // ---------- state ----------
+  function freshState(opts) {
+    const seed = Math.floor(Math.random() * 1e9);
+    let ids = PREGUNTAS.map(function (_, i) { return i; });
+    if (opts.shuffleQ) ids = shuffled(ids, seed);
+    else ids.sort(function (x, y) { return ORDER.indexOf(PREGUNTAS[x].t) - ORDER.indexOf(PREGUNTAS[y].t) || x - y; });
+    return {
+      seed: seed,
+      order: ids,
+      shuffleQ: !!opts.shuffleQ,
+      shuffleO: opts.shuffleO !== false,
+      dark: opts.dark || null,
+      current: 0,
+      answers: {},     // id -> chosen original index (current attempt)
+      graded: {},      // block -> {score, answers:{id:choice}}
+      attempts: {}     // block -> attempt count (changes option shuffle)
+    };
+  }
+
+  let state = load();
+  if (!state || !Array.isArray(state.order) || state.order.length !== PREGUNTAS.length) {
+    state = freshState({ shuffleQ: false, shuffleO: true });
+  }
+
+  const totalBlocks = Math.ceil(state.order.length / PER_BLOCK);
+  const view = document.getElementById("view");
+
+  function blockIds(b) { return state.order.slice(b * PER_BLOCK, b * PER_BLOCK + PER_BLOCK); }
+
+  function blockTopic(b) {
+    const ids = blockIds(b);
+    const t = PREGUNTAS[ids[0]].t;
+    return ids.every(function (id) { return PREGUNTAS[id].t === t; }) ? t : null;
+  }
+
+  function optionOrder(id, b) {
+    const n = PREGUNTAS[id].o.length;
+    const base = Array.from({ length: n }, function (_, i) { return i; });
+    if (!state.shuffleO) return base;
+    return shuffled(base, state.seed + id * 7919 + (state.attempts[b] || 0) * 104729);
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------- theme ----------
+  function applyTheme() {
+    if (state.dark === true) document.documentElement.setAttribute("data-theme", "dark");
+    else if (state.dark === false) document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+  }
+
+  // ---------- header progress ----------
+  function updateProgress() {
+    const done = Object.keys(state.graded).length;
+    let correct = 0, answered = 0;
+    Object.keys(state.graded).forEach(function (b) { correct += state.graded[b].score; answered += blockIds(+b).length; });
+    document.getElementById("progBar").style.width = (done / totalBlocks * 100) + "%";
+    document.getElementById("progText").textContent = "Bloques completados: " + done + " de " + totalBlocks;
+    document.getElementById("progScore").textContent = answered ? "Acumulado: " + correct + "/" + answered + " (" + Math.round(correct / answered * 100) + " %)" : "";
+  }
+
+  // ---------- render block ----------
+  function renderBlock(b) {
+    state.current = b;
+    save();
+    const ids = blockIds(b);
+    const g = state.graded[b];
+    const topic = blockTopic(b);
+    let html = "";
+
+    html += '<section class="card block-head">';
+    html += '<span class="tag">Bloque ' + (b + 1) + " de " + totalBlocks + "</span>";
+    if (topic) {
+      html += "<h1>" + esc(TEMAS[topic].n) + "</h1><div class=\"src\">Fuente: " + esc(TEMAS[topic].s) + "</div>";
+    } else {
+      html += "<h1>Preguntas mixtas</h1><div class=\"src\">Preguntas de varios temas del curso</div>";
+    }
+    html += "</section>";
+
+    if (g) html += scoreCard(b, g);
+
+    ids.forEach(function (id, k) {
+      const Q = PREGUNTAS[id];
+      const chosen = g ? g.answers[id] : state.answers[id];
+      const ord = optionOrder(id, b);
+      html += '<article class="card" id="q' + id + '">';
+      html += '<div class="q-num">Pregunta ' + (b * PER_BLOCK + k + 1) + (topic ? "" : " · " + esc(TEMAS[Q.t].n)) + "</div>";
+      html += '<p class="q-text">' + esc(Q.q) + "</p>";
+      html += '<div class="opts" role="radiogroup" aria-label="Alternativas">';
+      ord.forEach(function (oi, pos) {
+        let cls = "opt";
+        if (g) {
+          if (oi === Q.a) cls += " correct";
+          else if (oi === chosen) cls += " wrong";
+        } else if (oi === chosen) cls += " sel";
+        html += '<button type="button" role="radio" aria-checked="' + (oi === chosen) + '" class="' + cls + '" data-q="' + id + '" data-o="' + oi + '"' + (g ? " disabled" : "") + ">";
+        html += '<span class="letter">' + LETTERS[pos] + "</span><span>" + esc(Q.o[oi]) + "</span></button>";
+      });
+      html += "</div>";
+      if (g) {
+        const ok = chosen === Q.a;
+        const correctPos = ord.indexOf(Q.a);
+        html += '<div class="fb ' + (ok ? "ok" : "bad") + '"><strong>' +
+          (ok ? "¡Correcto!" : (chosen === undefined ? "Sin responder." : "Incorrecto.") + " La respuesta correcta es la " + LETTERS[correctPos] + ".") +
+          "</strong>" + esc(Q.e) + "</div>";
+      }
+      html += "</article>";
+    });
+
+    html += '<div class="actions">';
+    if (!g) {
+      const n = ids.filter(function (id) { return state.answers[id] !== undefined; }).length;
+      html += '<button class="btn" type="button" id="btnGrade"' + (n < ids.length ? " disabled" : "") + ">Ver resultados del bloque</button>";
+      html += '<span class="hint" id="answeredHint">' + n + " de " + ids.length + " respondidas</span>";
+    } else {
+      html += navButtons(b);
+    }
+    html += "</div>";
+
+    view.innerHTML = html;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function verdict(p) {
+    if (p >= 90) return ["ok", "¡Excelente dominio del tema!"];
+    if (p >= 70) return ["ok", "Buen trabajo. Revisa las preguntas que fallaste."];
+    if (p >= 50) return ["mid", "Vas bien, pero conviene repasar este tema."];
+    return ["low", "Necesitas repasar este tema antes de continuar."];
+  }
+
+  function scoreCard(b, g) {
+    const ids = blockIds(b);
+    const p = Math.round(g.score / ids.length * 100);
+    const v = verdict(p);
+    let html = '<section class="card" aria-live="polite">';
+    html += '<div class="score score-msg ' + v[0] + '"><div class="ring" style="--p:' + p + '"><span>' + g.score + "/" + ids.length + "</span></div>";
+    html += "<div><h2>Resultado: " + p + " %</h2><p>" + v[1] + "</p></div></div>";
+
+    const wrong = ids.filter(function (id) { return g.answers[id] !== PREGUNTAS[id].a; });
+    if (wrong.length) {
+      html += '<ul class="review-list">';
+      wrong.forEach(function (id) {
+        const pos = ids.indexOf(id);
+        html += '<li><a href="#q' + id + '">Pregunta ' + (b * PER_BLOCK + pos + 1) + "</a>: " + esc(PREGUNTAS[id].q) + "</li>";
+      });
+      html += "</ul>";
+    }
+    html += '<div class="actions">' + navButtons(b) + "</div></section>";
+    return html;
+  }
+
+  function navButtons(b) {
+    let h = '<button class="btn secondary" type="button" data-retry="' + b + '">Reintentar bloque</button>';
+    const next = nextPending(b);
+    if (allDone()) h += '<button class="btn" type="button" data-summary>Ver resumen final</button>';
+    else if (next !== null) h += '<button class="btn" type="button" data-go="' + next + '">Siguiente bloque →</button>';
+    return h;
+  }
+
+  function nextPending(b) {
+    for (let i = 1; i <= totalBlocks; i++) {
+      const k = (b + i) % totalBlocks;
+      if (!state.graded[k]) return k;
+    }
+    return null;
+  }
+  function allDone() { return Object.keys(state.graded).length === totalBlocks; }
+
+  // ---------- grading ----------
+  function grade(b) {
+    const ids = blockIds(b);
+    const answers = {};
+    let score = 0;
+    ids.forEach(function (id) {
+      answers[id] = state.answers[id];
+      if (state.answers[id] === PREGUNTAS[id].a) score++;
+      delete state.answers[id];
+    });
+    state.graded[b] = { score: score, answers: answers };
+    save();
+    renderBlock(b);
+  }
+
+  function retry(b) {
+    delete state.graded[b];
+    blockIds(b).forEach(function (id) { delete state.answers[id]; });
+    state.attempts[b] = (state.attempts[b] || 0) + 1;
+    save();
+    renderBlock(b);
+  }
+
+  // ---------- summary ----------
+  function renderSummary() {
+    const per = {};
+    ORDER.forEach(function (t) { per[t] = { c: 0, n: 0 }; });
+    let c = 0, n = 0;
+    Object.keys(state.graded).forEach(function (b) {
+      const g = state.graded[b];
+      blockIds(+b).forEach(function (id) {
+        const t = PREGUNTAS[id].t, ok = g.answers[id] === PREGUNTAS[id].a;
+        per[t].n++; n++;
+        if (ok) { per[t].c++; c++; }
+      });
+    });
+    const p = n ? Math.round(c / n * 100) : 0;
+    const v = verdict(p);
+    let html = '<section class="card"><span class="tag">Resumen final</span>';
+    html += '<div class="score score-msg ' + v[0] + '"><div class="ring" style="--p:' + p + '"><span>' + p + "%</span></div>";
+    html += "<div><h2>" + c + " de " + n + " correctas</h2><p>" + v[1] + "</p></div></div>";
+    html += '<table class="sum"><thead><tr><th>Tema</th><th class="num">Aciertos</th></tr></thead><tbody>';
+    const rows = ORDER.filter(function (t) { return per[t].n; }).sort(function (x, y) { return per[x].c / per[x].n - per[y].c / per[y].n; });
+    rows.forEach(function (t) {
+      const pp = Math.round(per[t].c / per[t].n * 100);
+      const col = pp >= 70 ? "var(--ok)" : pp >= 50 ? "var(--warn)" : "var(--bad)";
+      html += "<tr><td>" + esc(TEMAS[t].n) + '<div class="bar"><div style="width:' + pp + "%;background:" + col + '"></div></div></td>';
+      html += '<td class="num">' + per[t].c + "/" + per[t].n + " · " + pp + " %</td></tr>";
+    });
+    html += "</tbody></table>";
+    if (rows.length) html += '<p class="hint">Los temas están ordenados del más débil al más fuerte. Empieza a repasar por arriba.</p>';
+    html += '<div class="actions"><button class="btn" type="button" id="btnRestart">Empezar de nuevo</button>' +
+      '<button class="btn secondary" type="button" data-go="0">Revisar bloques</button></div></section>';
+    view.innerHTML = html;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ---------- events ----------
+  view.addEventListener("click", function (ev) {
+    const opt = ev.target.closest(".opt");
+    if (opt && !opt.disabled) {
+      const id = +opt.dataset.q, oi = +opt.dataset.o;
+      state.answers[id] = oi;
+      save();
+      opt.parentElement.querySelectorAll(".opt").forEach(function (el) {
+        const on = +el.dataset.o === oi;
+        el.classList.toggle("sel", on);
+        el.setAttribute("aria-checked", on);
+      });
+      const ids = blockIds(state.current);
+      const n = ids.filter(function (i) { return state.answers[i] !== undefined; }).length;
+      const btn = document.getElementById("btnGrade");
+      if (btn) btn.disabled = n < ids.length;
+      const hint = document.getElementById("answeredHint");
+      if (hint) hint.textContent = n + " de " + ids.length + " respondidas";
+      return;
+    }
+    const t = ev.target;
+    if (t.id === "btnGrade") return grade(state.current);
+    if (t.dataset.retry !== undefined) return retry(+t.dataset.retry);
+    if (t.dataset.go !== undefined) return renderBlock(+t.dataset.go);
+    if (t.dataset.summary !== undefined) return renderSummary();
+    if (t.id === "btnRestart") {
+      if (confirm("¿Borrar todos los resultados y empezar de nuevo?")) {
+        state = freshState({ shuffleQ: state.shuffleQ, shuffleO: state.shuffleO, dark: state.dark });
+        save(); renderBlock(0);
+      }
+    }
+  });
+
+  const dlgBlocks = document.getElementById("dlgBlocks");
+  const dlgSettings = document.getElementById("dlgSettings");
+  document.querySelectorAll("[data-close]").forEach(function (b) {
+    b.addEventListener("click", function () { b.closest("dialog").close(); });
+  });
+
+  document.getElementById("btnBlocks").addEventListener("click", function () {
+    const grid = document.getElementById("blockGrid");
+    let h = "";
+    for (let b = 0; b < totalBlocks; b++) {
+      const g = state.graded[b], t = blockTopic(b);
+      h += '<button type="button" class="bchip' + (g ? " done" : "") + (b === state.current ? " current" : "") + '" data-b="' + b + '">';
+      h += "<b>Bloque " + (b + 1) + "</b>" + (t ? esc(TEMAS[t].n) : "Mixto") + "<br><span>" + (g ? g.score + "/" + blockIds(b).length : "Pendiente") + "</span></button>";
+    }
+    if (allDone()) h += '<button type="button" class="bchip done" data-sum><b>Resumen</b>Resultados por tema</button>';
+    grid.innerHTML = h;
+    dlgBlocks.showModal();
+  });
+  document.getElementById("blockGrid").addEventListener("click", function (ev) {
+    const c = ev.target.closest(".bchip");
+    if (!c) return;
+    dlgBlocks.close();
+    if (c.dataset.sum !== undefined) renderSummary(); else renderBlock(+c.dataset.b);
+  });
+
+  const optShuffleQ = document.getElementById("optShuffleQ");
+  const optShuffleO = document.getElementById("optShuffleO");
+  const optDark = document.getElementById("optDark");
+  document.getElementById("btnSettings").addEventListener("click", function () {
+    optShuffleQ.checked = state.shuffleQ;
+    optShuffleO.checked = state.shuffleO;
+    optDark.checked = state.dark === true || (state.dark === null && matchMedia("(prefers-color-scheme: dark)").matches);
+    dlgSettings.showModal();
+  });
+  optShuffleQ.addEventListener("change", function () {
+    const has = Object.keys(state.graded).length || Object.keys(state.answers).length;
+    if (has && !confirm("Cambiar este ajuste reinicia tu avance. ¿Continuar?")) { optShuffleQ.checked = state.shuffleQ; return; }
+    state = freshState({ shuffleQ: optShuffleQ.checked, shuffleO: state.shuffleO, dark: state.dark });
+    save(); renderBlock(0);
+  });
+  optShuffleO.addEventListener("change", function () {
+    state.shuffleO = optShuffleO.checked; save(); renderBlock(state.current);
+  });
+  optDark.addEventListener("change", function () {
+    state.dark = optDark.checked; save(); applyTheme();
+  });
+  document.getElementById("btnReset").addEventListener("click", function () {
+    if (confirm("¿Borrar todo el avance guardado en este navegador?")) {
+      state = freshState({ shuffleQ: state.shuffleQ, shuffleO: state.shuffleO, dark: state.dark });
+      save(); dlgSettings.close(); renderBlock(0);
+    }
+  });
+
+  applyTheme();
+  if (state.current >= totalBlocks) state.current = 0;
+  renderBlock(state.current);
+})();
+</script>
+</body>
+</html>
